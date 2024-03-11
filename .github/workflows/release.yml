@@ -6,7 +6,7 @@ on:
 
 
 jobs:
-  Build:
+  FireFox52:
     runs-on: ubuntu-latest
     env:
       FIREFOX_OS: 'linux64'
@@ -28,12 +28,42 @@ jobs:
     - name: Release Tagged
       uses: marvinpinto/action-automatic-releases@latest
       with:
-        title: Release Firefox 52.r${{ env.FIREFOX_BUILD_ID }}
-        automatic_release_tag: firefox-52.r${{ env.FIREFOX_BUILD_ID }}
+        title: Release XP Vista Firefox 52.r${{ env.FIREFOX_BUILD_ID }}
+        automatic_release_tag: firefox-xp_vista
         prerelease: true
         draft: false 
         files: |
           dist
         repo_token: ${{ secrets.GITHUB_TOKEN }}
 
- 
+  FireFox115:
+    runs-on: ubuntu-latest
+    env:
+      FIREFOX_OS: 'linux64'
+      FIREFOX_LANG: 'en-US'
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build Firefox 115
+      run: |
+        chmod -x firefox-115-win7.sh
+        bash firefox-115-win7.sh
+        echo "$FIREFOX_VERSION.r$FIREFOX_BUILD_ID"
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: firefox-115-win7.AppImage
+        path: 'dist'
+
+    - name: Release Tagged
+      uses: marvinpinto/action-automatic-releases@latest
+      with:
+        title: Release Win7 Firefox 115.r${{ env.FIREFOX_BUILD_ID }}
+        automatic_release_tag: firefox-win7
+        prerelease: true
+        draft: false 
+        files: |
+          dist
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+
+       
