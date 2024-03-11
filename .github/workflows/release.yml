@@ -15,6 +15,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build Firefox 52
       run: |
+        chmod -x firefox-52-xp-vista.sh
         bash firefox-52-xp-vista.sh
         echo "$FIREFOX_VERSION.r$FIREFOX_BUILD_ID"
 
@@ -27,7 +28,7 @@ jobs:
     - name: Release Tagged
       uses: marvinpinto/action-automatic-releases@latest
       with:
-        title: ${{ matrix.product }} v${{ env.FIREFOX_VERSION }}.r${{ env.FIREFOX_BUILD_ID }}
+        title: Release Firefox 52.r${{ env.FIREFOX_BUILD_ID }}
         automatic_release_tag: firefox-52.r${{ env.FIREFOX_BUILD_ID }}
         prerelease: true
         draft: false 
