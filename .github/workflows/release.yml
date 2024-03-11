@@ -1,0 +1,38 @@
+name: Release
+on:
+  push:
+    branches:
+      - "master"
+
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    env:
+      FIREFOX_OS: 'linux64'
+      FIREFOX_LANG: 'en-US'
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build Firefox 52
+      run: |
+        bash firefox-52-xp-vista.sh
+        echo "$FIREFOX_VERSION.r$FIREFOX_BUILD_ID"
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: firefox-52-xp-vista.AppImage
+        path: 'dist'
+
+    - name: Release Tagged
+      uses: marvinpinto/action-automatic-releases@latest
+      with:
+        title: ${{ matrix.product }} v${{ env.FIREFOX_VERSION }}.r${{ env.FIREFOX_BUILD_ID }}
+        automatic_release_tag: firefox-52.r${{ env.FIREFOX_BUILD_ID }}
+        prerelease: true
+        draft: false 
+        files: |
+          dist
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+
+ 
